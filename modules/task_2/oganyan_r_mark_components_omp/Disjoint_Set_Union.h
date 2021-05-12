@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <utility>
+#include <algorithm>
 
 template<typename T>
 class Disjoint_Set_Union {
@@ -21,11 +22,13 @@ class Disjoint_Set_Union {
         rank[vertex] = 0;
     }
 
+
     void Init() {
         for (std::size_t vertex = 0; vertex < rank.size(); ++vertex) {
             make_set(vertex);
         }
     }
+
 
     void Init(int size) {
         rank.resize(size);
@@ -36,14 +39,29 @@ class Disjoint_Set_Union {
     }
 
     int find_set(int vertex) {
-        if (vertex == parent[vertex])
+        //  Bug here (parent[vertex] = [parent[paren[vertex]])
+        if (vertex == parent[vertex]) {
             return vertex;
+        }
+
         return parent[vertex] = find_set(parent[vertex]);
     }
 
+    int find_set(int vertex, int last) {
+        if (vertex == parent[vertex]) {
+            return vertex;
+        }
+
+        if (last == parent[vertex]) {
+            return std::min(last, vertex);
+        }
+
+        return parent[vertex] = find_set(parent[vertex], vertex);
+    }
+
     void union_sets(int fi_union, int se_union) {
-        fi_union = find_set(fi_union);
-        se_union = find_set(se_union);
+        fi_union = find_set(fi_union, fi_union);
+        se_union = find_set(se_union, se_union);
         if (fi_union != se_union) {
             if (rank[fi_union] < rank[se_union])
                 std::swap(fi_union, se_union);

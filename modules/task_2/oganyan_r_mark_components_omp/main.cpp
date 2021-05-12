@@ -6,8 +6,11 @@
 #include <random>
 #include "../../modules/task_2/oganyan_r_mark_components_omp/mark_components_omp.h"
 
+//  static int count = 0;  //  amount of tests
 
 void Create_Custom_Test(int height, int width) {
+    //  ++count;
+    //  std::cout<<count<<std::endl;
     std::random_device rd;
     std::default_random_engine generator(rd());
     std::uniform_int_distribution<unsigned int> distribution(0, 1);
@@ -311,7 +314,7 @@ TEST(Comparing_to_a_big_sample, square_image_3) {
 }
 
 TEST(Comparing_random_img, small_image) {
-    Create_Custom_Test(50, 50);
+    Create_Custom_Test(10, 10);
 }
 
 TEST(Comparing_random_img, small_image_2) {
@@ -345,5 +348,6 @@ TEST(Comparing_random_img, big_image_3) {
 
 int main() {
     testing::InitGoogleTest();
+    //  testing::FLAGS_gtest_repeat = 100000;
     return RUN_ALL_TESTS();
 }

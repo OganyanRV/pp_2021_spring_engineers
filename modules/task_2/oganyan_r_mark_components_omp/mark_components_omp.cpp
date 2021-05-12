@@ -3,6 +3,7 @@
 #include "../../modules/task_2/oganyan_r_mark_components_omp/mark_components_omp.h"
 #include <omp.h>
 #include <iostream>
+#include <atomic>
 
 static const std::vector<std::pair<int, int>> directions{
         {-1, 0},
@@ -67,11 +68,11 @@ std::pair<std::vector<int>, int> MarkComponentsPar(std::vector<int> *img, int he
     int count_comp{0};
     Disjoint_Set_Union<int> dsu(height * width);
     dsu.Init();
-    omp_set_num_threads(4);
+    omp_set_num_threads(5);
 
 #pragma omp parallel default(none) shared(img_new, width, height, count_comp, dsu, directions)
     {
-#pragma omp for
+#pragma omp for schedule(static)
         for (int i = 0; i < height; ++i) {
             for (int j = 0; j < width; ++j) {
                 if (img_new[i * width + j]) {
@@ -91,11 +92,12 @@ std::pair<std::vector<int>, int> MarkComponentsPar(std::vector<int> *img, int he
         }
     }
 
+
     for (int i = 0; i < height; ++i) {
         for (int j = 0; j < width; ++j) {
             int cur = i * width + j;
             if (img_new[cur]) {
-                img_new[cur] = dsu.find_set(cur) + 1;
+                img_new[cur] = dsu.find_set(cur, cur) + 1;
             }
             if (img_new[cur] == cur + 1) {
                 count_comp++;
