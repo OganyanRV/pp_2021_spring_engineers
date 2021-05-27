@@ -3,18 +3,18 @@
 #include "../../modules/task_1/oganyan_r_mark_components/mark_components.h"
 
 static const std::vector<std::pair<int, int>> directions{
-       // {-1, -1},
+        // {-1, -1},
         {-1, 0},
-      //  {-1, 1},
+        //  {-1, 1},
         {0,  -1},
         {0,  1},
-       // {1,  -1},
+        // {1,  -1},
         {1,  0},
-       // {1,  1},
+        // {1,  1},
 };
 
 void bfs(std::vector<uint16_t>* img, std::pair<uint16_t, uint16_t> start,
-                    uint16_t* number, uint16_t width, uint16_t height) {
+         uint16_t* number, uint16_t width, uint16_t height) {
     if ((*img)[start.first * width + start.second] != 1) {
         return;
     }

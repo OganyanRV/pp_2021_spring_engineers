@@ -95,7 +95,7 @@ TEST(Comparing_to_a_big_sample, square_image_1) {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            };
+    };
     std::vector<uint16_t> result_image{
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
@@ -112,7 +112,7 @@ TEST(Comparing_to_a_big_sample, square_image_1) {
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            };
+    };
     std::pair<std::vector<uint16_t>, uint16_t> res_image;
     ASSERT_NO_THROW(res_image = MarkComponents(source_image, height, width));
     ASSERT_EQ(res_image.second, 1);
