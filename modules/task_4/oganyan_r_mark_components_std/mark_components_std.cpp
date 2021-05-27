@@ -12,7 +12,7 @@ static const std::vector<std::pair<int, int>> directions{
 };
 
 
-void bfs(std::vector<int> *img, std::pair<int, int> start,
+void bfs_3(std::vector<int> *img, std::pair<int, int> start,
          int *number, int width, int height) {
     if ((*img)[start.first * width + start.second] != 1) {
         return;
@@ -38,7 +38,7 @@ void bfs(std::vector<int> *img, std::pair<int, int> start,
 }
 
 
-std::pair<std::vector<int>, int> MarkComponentsSeq(std::vector<int> *img, int height, int width) {
+std::pair<std::vector<int>, int> MarkComponentsSeq_3(std::vector<int> *img, int height, int width) {
     if ((*img).size() == 0) {
         throw std::invalid_argument("Size of the image cant be negative");
     }
@@ -49,7 +49,7 @@ std::pair<std::vector<int>, int> MarkComponentsSeq(std::vector<int> *img, int he
     int count_comp{1};
     for (int i{0}; i < height; ++i) {
         for (int j{0}; j < width; ++j) {
-            bfs(&img_new, {i, j}, &count_comp, width, height);
+            bfs_3(&img_new, {i, j}, &count_comp, width, height);
         }
     }
     return {img_new, count_comp - 1};

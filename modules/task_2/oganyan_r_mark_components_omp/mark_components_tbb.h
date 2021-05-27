@@ -15,13 +15,13 @@
 
 
 
-std::pair<std::vector<int>, int> MarkComponentsSeq(std::vector<int> *img,
+std::pair<std::vector<int>, int> MarkComponentsSeq_1(std::vector<int> *img,
                                                    int height, int width);
 
 std::pair<std::vector<int>, int> MarkComponentsPar(std::vector<int> *img,
                                                    int height, int width);
 
-void bfs(std::vector<int> *img, std::pair<int, int> start,
+void bfs_1(std::vector<int> *img, std::pair<int, int> start,
          int *number, int width, int height);
 
 

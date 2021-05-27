@@ -23,7 +23,7 @@ void Create_Custom_Test(int height, int width) {
     std::cout << height << "x" << width << ": \n";
 
     auto start = std::chrono::high_resolution_clock::now();
-    auto ans = MarkComponentsSeq(&seq, height, width);
+    auto ans = MarkComponentsSeq_3(&seq, height, width);
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> diff = end-start;
     std::cout << "Sequential: " << std::setw(9) << diff.count() << "\n";
@@ -40,280 +40,280 @@ void Create_Custom_Test(int height, int width) {
 
     ASSERT_EQ(ans.second, ans2.second);
 }
-
-TEST(Comparing_to_a_sample, rectangle_image) {
-    int width = 3;
-    int height = 5;
-    std::vector<int> source_image{
-            0, 1, 1,
-            0, 0, 0,
-            1, 1, 1,
-            0, 1, 0,
-            0, 0, 0,
-    };
-    std::vector<int> result_image{
-            0, 2, 2,
-            0, 0, 0,
-            3, 3, 3,
-            0, 3, 0,
-            0, 0, 0,
-    };
-    std::pair<std::vector<int>, int> res_image_seq;
-    std::pair<std::vector<int>, int> res_image_paral;
-    ASSERT_NO_THROW(res_image_seq = MarkComponentsSeq(&source_image, height, width));
-    ASSERT_NO_THROW(res_image_paral = MarkComponentsParStd(&source_image, height, width, 4));
-    ASSERT_EQ(res_image_seq.second, 2);
-    ASSERT_EQ(res_image_seq.second, res_image_paral.second);
-}
-
-TEST(Wrong_data, wrong_img_2) {
-    std::vector<int> source_image{};
-    std::vector<int> result_image{};
-    int width = 5;
-    int height = 2;
-    ASSERT_ANY_THROW(MarkComponentsSeq(&source_image, height, width));
-    ASSERT_ANY_THROW(MarkComponentsParStd(&source_image, height, width, 4));
-}
-
-
-TEST(Comparing_to_a_sample, square_image_1) {
-    int width = 6;
-    int height = 6;
-    std::vector<int> source_image{
-            0, 1, 0, 0, 0, 0,
-            1, 1, 1, 0, 0, 1,
-            0, 0, 0, 0, 1, 1,
-            0, 1, 0, 1, 0, 0,
-            1, 1, 1, 0, 0, 0,
-            0, 0, 0, 0, 1, 1,
-    };
-    std::vector<int> result_image{
-            0, 2, 0, 0, 0, 0,
-            2, 2, 2, 0, 0, 3,
-            0, 0, 0, 0, 3, 3,
-            0, 4, 0, 5, 0, 0,
-            4, 4, 4, 0, 0, 0,
-            0, 0, 0, 0, 6, 6,
-    };
-    std::pair<std::vector<int>, int> res_image_seq;
-    std::pair<std::vector<int>, int> res_image_paral;
-    ASSERT_NO_THROW(res_image_seq = MarkComponentsSeq(&source_image, height, width));
-    ASSERT_NO_THROW(res_image_paral = MarkComponentsParStd(&source_image, height, width, 4));
-    ASSERT_EQ(res_image_seq.second, 5);
-    ASSERT_EQ(res_image_seq.second, res_image_paral.second);
-}
-
-TEST(Wrong_data, wrong_width_and_height_3) {
-    std::vector<int> source_image{
-            0, 0, 1,
-            1, 0, 1,
-            0, 0, 0,
-    };
-    std::vector<int> result_image{
-            0, 0, 2,
-            3, 0, 2,
-            0, 0, 0,
-    };
-    int width = 1;
-    int height = 3;
-    ASSERT_ANY_THROW(MarkComponentsSeq(&source_image, height, width));
-    ASSERT_ANY_THROW(MarkComponentsParStd(&source_image, height, width, 4));
-}
-
-TEST(Comparing_to_a_big_sample, square_image_1) {
-    int width = 15;
-    int height = 15;
-    std::vector<int> source_image{
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    };
-    std::vector<int> result_image{
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    };
-    std::pair<std::vector<int>, int> res_image_seq;
-    std::pair<std::vector<int>, int> res_image_paral;
-    ASSERT_NO_THROW(res_image_seq = MarkComponentsSeq(&source_image, height, width));
-    ASSERT_NO_THROW(res_image_paral = MarkComponentsParStd(&source_image, height, width, 4));
-    ASSERT_EQ(res_image_seq.second, 1);
-    ASSERT_EQ(res_image_seq.second, res_image_paral.second);
-}
-
-TEST(Wrong_data, wrong_width_and_height_1) {
-    std::vector<int> source_image = {
-            0, 1, 1,
-            1, 0, 0,
-            0, 0, 0,
-    };
-    std::vector<int> result_image = {
-            0, 2, 2,
-            3, 0, 0,
-            0, 0, 0,
-    };
-    int width = 4;
-    int height = 3;
-    ASSERT_ANY_THROW(MarkComponentsSeq(&source_image, height, width));
-    ASSERT_ANY_THROW(MarkComponentsParStd(&source_image, height, width, 4));
-}
-
-TEST(Comparing_to_a_big_sample, square_image_2) {
-    int width = 10;
-    int height = 10;
-    std::vector<int> source_image{
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 0, 1, 0, 0, 0, 0, 1, 0, 1,
-            1, 0, 1, 0, 1, 1, 0, 1, 0, 1,
-            1, 0, 1, 0, 1, 1, 0, 1, 0, 1,
-            1, 0, 1, 0, 0, 0, 0, 1, 0, 1,
-            1, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    };
-    std::vector<int> result_image{
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-            2, 0, 3, 3, 3, 3, 3, 3, 0, 2,
-            2, 0, 3, 0, 0, 0, 0, 3, 0, 2,
-            2, 0, 3, 0, 4, 4, 0, 3, 0, 2,
-            2, 0, 3, 0, 4, 4, 0, 3, 0, 2,
-            2, 0, 3, 0, 0, 0, 0, 3, 0, 2,
-            2, 0, 3, 3, 3, 3, 3, 3, 0, 2,
-            2, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    };
-    std::pair<std::vector<int>, int> res_image_seq;
-    std::pair<std::vector<int>, int> res_image_paral;
-    ASSERT_NO_THROW(res_image_seq = MarkComponentsSeq(&source_image, height, width));
-    ASSERT_NO_THROW(res_image_paral = MarkComponentsParStd(&source_image, height, width, 4));
-    ASSERT_EQ(res_image_seq.second, 3);
-    ASSERT_EQ(res_image_seq.second, res_image_paral.second);
-}
-
-TEST(Wrong_data, wrong_img) {
-    std::vector<int> source_image;
-    std::vector<int> result_image;
-    int width = 0;
-    int height = 0;
-    ASSERT_ANY_THROW(MarkComponentsSeq(&source_image, height, width));
-    ASSERT_ANY_THROW(MarkComponentsParStd(&source_image, height, width, 4));
-}
-
-
-TEST(Comparing_to_a_sample, square_image_2) {
-    int width = 5;
-    int height = 5;
-    std::vector<int> source_image{
-            0, 1, 0, 1, 1,
-            0, 0, 0, 1, 1,
-            1, 0, 0, 0, 1,
-            0, 0, 1, 1, 1,
-            0, 0, 0, 0, 1,
-    };
-    std::vector<int> result_image{
-            0, 2, 0, 3, 3,
-            0, 0, 0, 3, 3,
-            4, 0, 0, 0, 3,
-            0, 0, 3, 3, 3,
-            0, 0, 0, 0, 3,
-    };
-    std::pair<std::vector<int>, int> res_image_seq;
-    std::pair<std::vector<int>, int> res_image_paral;
-    ASSERT_NO_THROW(res_image_seq = MarkComponentsSeq(&source_image, height, width));
-    ASSERT_NO_THROW(res_image_paral = MarkComponentsParStd(&source_image, height, width, 4));
-    ASSERT_EQ(res_image_seq.second, 3);
-    ASSERT_EQ(res_image_seq.second, res_image_paral.second);
-}
-
-TEST(Wrong_data, wrong_img_1) {
-    std::vector<int> source_image{};
-    std::vector<int> result_image{};
-    int width = 0;
-    int height = 0;
-    ASSERT_ANY_THROW(MarkComponentsSeq(&source_image, height, width));
-    ASSERT_ANY_THROW(MarkComponentsParStd(&source_image, height, width, 4));
-}
-
-TEST(Wrong_data, wrong_width_and_height_2) {
-    std::vector<int> source_image{
-            0, 1, 1,
-            0, 0, 1,
-            1, 1,
-    };
-    std::vector<int> result_image{
-            0, 2, 2,
-            0, 0, 2,
-            2, 2,
-    };
-    int width = 3;
-    int height = 3;
-    ASSERT_ANY_THROW(MarkComponentsSeq(&source_image, height, width));
-    ASSERT_ANY_THROW(MarkComponentsParStd(&source_image, height, width, 4));
-}
-
-
-TEST(Comparing_to_a_big_sample, square_image_3) {
-    int width = 10;
-    int height = 10;
-    std::vector<int> source_image{
-            0, 1, 0, 1, 0, 1, 1, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 1, 1, 0, 0,
-            0, 0, 1, 1, 0, 1, 0, 0, 1, 0,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            1, 0, 1, 0, 1, 1, 1, 1, 0, 0,
-            1, 0, 1, 1, 1, 1, 1, 0, 0, 1,
-            0, 1, 1, 0, 0, 0, 0, 1, 0, 0,
-            0, 0, 0, 1, 1, 0, 1, 0, 1, 1,
-            1, 0, 1, 0, 0, 0, 0, 0, 1, 1,
-            1, 0, 1, 0, 1, 0, 1, 0, 1, 1,
-    };
-    std::vector<int> result_image{
-            0, 2, 0, 3, 0, 4, 4, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 4, 4, 0, 0,
-            0, 0, 5, 5, 0, 6, 0, 0, 7, 0,
-            8, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            8, 0, 9, 0, 9, 9, 9, 9, 0, 0,
-            8, 0, 9, 9, 9, 9, 9, 0, 0, 10,
-            0, 9, 9, 0, 0, 0, 0, 11, 0, 0,
-            0, 0, 0, 12, 12, 0, 13, 0, 14, 14,
-            15, 0, 16, 0, 0, 0, 0, 0, 14, 14,
-            15, 0, 16, 0, 17, 0, 18, 0, 14, 14,
-    };
-
-    std::pair<std::vector<int>, int> res_image_seq;
-    std::pair<std::vector<int>, int> res_image_paral;
-    ASSERT_NO_THROW(res_image_seq = MarkComponentsSeq(&source_image, height, width));
-    ASSERT_NO_THROW(res_image_paral = MarkComponentsParStd(&source_image, height, width, 4));
-    ASSERT_EQ(res_image_seq.second, 17);
-    ASSERT_EQ(res_image_seq.second, res_image_paral.second);
-}
+//
+//TEST(Comparing_to_a_sample, rectangle_image) {
+//    int width = 3;
+//    int height = 5;
+//    std::vector<int> source_image{
+//            0, 1, 1,
+//            0, 0, 0,
+//            1, 1, 1,
+//            0, 1, 0,
+//            0, 0, 0,
+//    };
+//    std::vector<int> result_image{
+//            0, 2, 2,
+//            0, 0, 0,
+//            3, 3, 3,
+//            0, 3, 0,
+//            0, 0, 0,
+//    };
+//    std::pair<std::vector<int>, int> res_image_seq;
+//    std::pair<std::vector<int>, int> res_image_paral;
+//    ASSERT_NO_THROW(res_image_seq = MarkComponentsSeq(&source_image, height, width));
+//    ASSERT_NO_THROW(res_image_paral = MarkComponentsParStd(&source_image, height, width, 4));
+//    ASSERT_EQ(res_image_seq.second, 2);
+//    ASSERT_EQ(res_image_seq.second, res_image_paral.second);
+//}
+//
+//TEST(Wrong_data, wrong_img_2) {
+//    std::vector<int> source_image{};
+//    std::vector<int> result_image{};
+//    int width = 5;
+//    int height = 2;
+//    ASSERT_ANY_THROW(MarkComponentsSeq(&source_image, height, width));
+//    ASSERT_ANY_THROW(MarkComponentsParStd(&source_image, height, width, 4));
+//}
+//
+//
+//TEST(Comparing_to_a_sample, square_image_1) {
+//    int width = 6;
+//    int height = 6;
+//    std::vector<int> source_image{
+//            0, 1, 0, 0, 0, 0,
+//            1, 1, 1, 0, 0, 1,
+//            0, 0, 0, 0, 1, 1,
+//            0, 1, 0, 1, 0, 0,
+//            1, 1, 1, 0, 0, 0,
+//            0, 0, 0, 0, 1, 1,
+//    };
+//    std::vector<int> result_image{
+//            0, 2, 0, 0, 0, 0,
+//            2, 2, 2, 0, 0, 3,
+//            0, 0, 0, 0, 3, 3,
+//            0, 4, 0, 5, 0, 0,
+//            4, 4, 4, 0, 0, 0,
+//            0, 0, 0, 0, 6, 6,
+//    };
+//    std::pair<std::vector<int>, int> res_image_seq;
+//    std::pair<std::vector<int>, int> res_image_paral;
+//    ASSERT_NO_THROW(res_image_seq = MarkComponentsSeq(&source_image, height, width));
+//    ASSERT_NO_THROW(res_image_paral = MarkComponentsParStd(&source_image, height, width, 4));
+//    ASSERT_EQ(res_image_seq.second, 5);
+//    ASSERT_EQ(res_image_seq.second, res_image_paral.second);
+//}
+//
+//TEST(Wrong_data, wrong_width_and_height_3) {
+//    std::vector<int> source_image{
+//            0, 0, 1,
+//            1, 0, 1,
+//            0, 0, 0,
+//    };
+//    std::vector<int> result_image{
+//            0, 0, 2,
+//            3, 0, 2,
+//            0, 0, 0,
+//    };
+//    int width = 1;
+//    int height = 3;
+//    ASSERT_ANY_THROW(MarkComponentsSeq(&source_image, height, width));
+//    ASSERT_ANY_THROW(MarkComponentsParStd(&source_image, height, width, 4));
+//}
+//
+//TEST(Comparing_to_a_big_sample, square_image_1) {
+//    int width = 15;
+//    int height = 15;
+//    std::vector<int> source_image{
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//    };
+//    std::vector<int> result_image{
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//    };
+//    std::pair<std::vector<int>, int> res_image_seq;
+//    std::pair<std::vector<int>, int> res_image_paral;
+//    ASSERT_NO_THROW(res_image_seq = MarkComponentsSeq(&source_image, height, width));
+//    ASSERT_NO_THROW(res_image_paral = MarkComponentsParStd(&source_image, height, width, 4));
+//    ASSERT_EQ(res_image_seq.second, 1);
+//    ASSERT_EQ(res_image_seq.second, res_image_paral.second);
+//}
+//
+//TEST(Wrong_data, wrong_width_and_height_1) {
+//    std::vector<int> source_image = {
+//            0, 1, 1,
+//            1, 0, 0,
+//            0, 0, 0,
+//    };
+//    std::vector<int> result_image = {
+//            0, 2, 2,
+//            3, 0, 0,
+//            0, 0, 0,
+//    };
+//    int width = 4;
+//    int height = 3;
+//    ASSERT_ANY_THROW(MarkComponentsSeq(&source_image, height, width));
+//    ASSERT_ANY_THROW(MarkComponentsParStd(&source_image, height, width, 4));
+//}
+//
+//TEST(Comparing_to_a_big_sample, square_image_2) {
+//    int width = 10;
+//    int height = 10;
+//    std::vector<int> source_image{
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//            1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+//            1, 0, 1, 1, 1, 1, 1, 1, 0, 1,
+//            1, 0, 1, 0, 0, 0, 0, 1, 0, 1,
+//            1, 0, 1, 0, 1, 1, 0, 1, 0, 1,
+//            1, 0, 1, 0, 1, 1, 0, 1, 0, 1,
+//            1, 0, 1, 0, 0, 0, 0, 1, 0, 1,
+//            1, 0, 1, 1, 1, 1, 1, 1, 0, 1,
+//            1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+//            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//    };
+//    std::vector<int> result_image{
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//            2, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+//            2, 0, 3, 3, 3, 3, 3, 3, 0, 2,
+//            2, 0, 3, 0, 0, 0, 0, 3, 0, 2,
+//            2, 0, 3, 0, 4, 4, 0, 3, 0, 2,
+//            2, 0, 3, 0, 4, 4, 0, 3, 0, 2,
+//            2, 0, 3, 0, 0, 0, 0, 3, 0, 2,
+//            2, 0, 3, 3, 3, 3, 3, 3, 0, 2,
+//            2, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+//            2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+//    };
+//    std::pair<std::vector<int>, int> res_image_seq;
+//    std::pair<std::vector<int>, int> res_image_paral;
+//    ASSERT_NO_THROW(res_image_seq = MarkComponentsSeq(&source_image, height, width));
+//    ASSERT_NO_THROW(res_image_paral = MarkComponentsParStd(&source_image, height, width, 4));
+//    ASSERT_EQ(res_image_seq.second, 3);
+//    ASSERT_EQ(res_image_seq.second, res_image_paral.second);
+//}
+//
+//TEST(Wrong_data, wrong_img) {
+//    std::vector<int> source_image;
+//    std::vector<int> result_image;
+//    int width = 0;
+//    int height = 0;
+//    ASSERT_ANY_THROW(MarkComponentsSeq(&source_image, height, width));
+//    ASSERT_ANY_THROW(MarkComponentsParStd(&source_image, height, width, 4));
+//}
+//
+//
+//TEST(Comparing_to_a_sample, square_image_2) {
+//    int width = 5;
+//    int height = 5;
+//    std::vector<int> source_image{
+//            0, 1, 0, 1, 1,
+//            0, 0, 0, 1, 1,
+//            1, 0, 0, 0, 1,
+//            0, 0, 1, 1, 1,
+//            0, 0, 0, 0, 1,
+//    };
+//    std::vector<int> result_image{
+//            0, 2, 0, 3, 3,
+//            0, 0, 0, 3, 3,
+//            4, 0, 0, 0, 3,
+//            0, 0, 3, 3, 3,
+//            0, 0, 0, 0, 3,
+//    };
+//    std::pair<std::vector<int>, int> res_image_seq;
+//    std::pair<std::vector<int>, int> res_image_paral;
+//    ASSERT_NO_THROW(res_image_seq = MarkComponentsSeq(&source_image, height, width));
+//    ASSERT_NO_THROW(res_image_paral = MarkComponentsParStd(&source_image, height, width, 4));
+//    ASSERT_EQ(res_image_seq.second, 3);
+//    ASSERT_EQ(res_image_seq.second, res_image_paral.second);
+//}
+//
+//TEST(Wrong_data, wrong_img_1) {
+//    std::vector<int> source_image{};
+//    std::vector<int> result_image{};
+//    int width = 0;
+//    int height = 0;
+//    ASSERT_ANY_THROW(MarkComponentsSeq(&source_image, height, width));
+//    ASSERT_ANY_THROW(MarkComponentsParStd(&source_image, height, width, 4));
+//}
+//
+//TEST(Wrong_data, wrong_width_and_height_2) {
+//    std::vector<int> source_image{
+//            0, 1, 1,
+//            0, 0, 1,
+//            1, 1,
+//    };
+//    std::vector<int> result_image{
+//            0, 2, 2,
+//            0, 0, 2,
+//            2, 2,
+//    };
+//    int width = 3;
+//    int height = 3;
+//    ASSERT_ANY_THROW(MarkComponentsSeq(&source_image, height, width));
+//    ASSERT_ANY_THROW(MarkComponentsParStd(&source_image, height, width, 4));
+//}
+//
+//
+//TEST(Comparing_to_a_big_sample, square_image_3) {
+//    int width = 10;
+//    int height = 10;
+//    std::vector<int> source_image{
+//            0, 1, 0, 1, 0, 1, 1, 0, 0, 0,
+//            0, 0, 0, 0, 0, 0, 1, 1, 0, 0,
+//            0, 0, 1, 1, 0, 1, 0, 0, 1, 0,
+//            1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+//            1, 0, 1, 0, 1, 1, 1, 1, 0, 0,
+//            1, 0, 1, 1, 1, 1, 1, 0, 0, 1,
+//            0, 1, 1, 0, 0, 0, 0, 1, 0, 0,
+//            0, 0, 0, 1, 1, 0, 1, 0, 1, 1,
+//            1, 0, 1, 0, 0, 0, 0, 0, 1, 1,
+//            1, 0, 1, 0, 1, 0, 1, 0, 1, 1,
+//    };
+//    std::vector<int> result_image{
+//            0, 2, 0, 3, 0, 4, 4, 0, 0, 0,
+//            0, 0, 0, 0, 0, 0, 4, 4, 0, 0,
+//            0, 0, 5, 5, 0, 6, 0, 0, 7, 0,
+//            8, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+//            8, 0, 9, 0, 9, 9, 9, 9, 0, 0,
+//            8, 0, 9, 9, 9, 9, 9, 0, 0, 10,
+//            0, 9, 9, 0, 0, 0, 0, 11, 0, 0,
+//            0, 0, 0, 12, 12, 0, 13, 0, 14, 14,
+//            15, 0, 16, 0, 0, 0, 0, 0, 14, 14,
+//            15, 0, 16, 0, 17, 0, 18, 0, 14, 14,
+//    };
+//
+//    std::pair<std::vector<int>, int> res_image_seq;
+//    std::pair<std::vector<int>, int> res_image_paral;
+//    ASSERT_NO_THROW(res_image_seq = MarkComponentsSeq(&source_image, height, width));
+//    ASSERT_NO_THROW(res_image_paral = MarkComponentsParStd(&source_image, height, width, 4));
+//    ASSERT_EQ(res_image_seq.second, 17);
+//    ASSERT_EQ(res_image_seq.second, res_image_paral.second);
+//}
 
 
 TEST(Comparing_random_img, small_image) {

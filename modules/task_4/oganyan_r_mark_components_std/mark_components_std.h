@@ -10,18 +10,18 @@
 #include <stdexcept>
 #include <vector>
 #include <queue>
-#include "../../modules/task_4/oganyan_r_mark_components_std/Disjoint_Set_Union.h"
+#include "../../modules/task_2/oganyan_r_mark_components_omp/Disjoint_Set_Union.h"
 
 
 
 
-std::pair<std::vector<int>, int> MarkComponentsSeq(std::vector<int> *img,
+std::pair<std::vector<int>, int> MarkComponentsSeq_3(std::vector<int> *img,
                                                    int height, int width);
 
 std::pair<std::vector<int>, int> MarkComponentsParStd(std::vector<int> *img,
                                                    int height, int width, int num_proc);
 
-void bfs(std::vector<int> *img, std::pair<int, int> start,
+void bfs_3(std::vector<int> *img, std::pair<int, int> start,
          int *number, int width, int height);
 
 

@@ -23,7 +23,7 @@ void Create_Custom_Test(int height, int width) {
     std::cout << height << "x" << width << ": \n";
 
     double start = omp_get_wtime();
-    auto ans = MarkComponentsSeq(&seq, height, width);
+    auto ans = MarkComponentsSeq_1(&seq, height, width);
     double end = omp_get_wtime();
     std::cout << "Sequential: " << (end - start) << "\n";
     std::cout << " \n";
