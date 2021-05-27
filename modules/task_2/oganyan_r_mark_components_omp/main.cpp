@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 #include <omp.h>
 #include <random>
-#include "../../modules/task_2/oganyan_r_mark_components_omp/mark_components_tbb.h"
+#include "../../modules/task_2/oganyan_r_mark_components_omp/mark_components_omp.h"
 
 //  static int count = 0;  //  amount of tests
 

@@ -1,9 +1,9 @@
 // Copyright 2021 Oganyan Robert
 
-#include "../../modules/task_2/oganyan_r_mark_components_omp/mark_components_omp.h"
-#include <omp.h>
-#include <iostream>
-#include <atomic>
+#include "../../modules/task_3/oganyan_r_mark_components_tbb/mark_components_tbb.h"
+#include <tbb/parallel_for.h>
+#include <tbb/blocked_range2d.h>
+#include <tbb/task_scheduler_init.h>
 
 static const std::vector<std::pair<int, int>> directions{
         {-1, 0},
@@ -13,7 +13,7 @@ static const std::vector<std::pair<int, int>> directions{
 };
 
 
-void bfs_1(std::vector<int> *img, std::pair<int, int> start,
+void bfs_2(std::vector<int> *img, std::pair<int, int> start,
          int *number, int width, int height) {
     if ((*img)[start.first * width + start.second] != 1) {
         return;
@@ -39,7 +39,7 @@ void bfs_1(std::vector<int> *img, std::pair<int, int> start,
 }
 
 
-std::pair<std::vector<int>, int> MarkComponentsSeq_1(std::vector<int> *img, int height, int width) {
+std::pair<std::vector<int>, int> MarkComponentsSeq_2(std::vector<int> *img, int height, int width) {
     if ((*img).size() == 0) {
         throw std::invalid_argument("Size of the image cant be negative");
     }
@@ -50,14 +50,14 @@ std::pair<std::vector<int>, int> MarkComponentsSeq_1(std::vector<int> *img, int 
     int count_comp{1};
     for (int i{0}; i < height; ++i) {
         for (int j{0}; j < width; ++j) {
-            bfs_1(&img_new, {i, j}, &count_comp, width, height);
+            bfs_2(&img_new, {i, j}, &count_comp, width, height);
         }
     }
     return {img_new, count_comp - 1};
 }
 
 
-std::pair<std::vector<int>, int> MarkComponentsPar(std::vector<int> *img, int height, int width) {
+std::pair<std::vector<int>, int> MarkComponentsParTbb(std::vector<int> *img, int height, int width, int proc_num) {
     if ((*img).size() == 0) {
         throw std::invalid_argument("Size of the image cant be negative");
     }
@@ -68,37 +68,30 @@ std::pair<std::vector<int>, int> MarkComponentsPar(std::vector<int> *img, int he
     int count_comp{0};
     Disjoint_Set_Union<int> dsu(height * width);
     dsu.Init();
-    omp_set_num_threads(4);
 
-//    double start = omp_get_wtime();
+    tbb::task_scheduler_init init(proc_num);
+    tbb::parallel_for(tbb::blocked_range<int>(0, height, height/proc_num + 1),
+                      [&img_new, &dsu, width, height](tbb::blocked_range<int> block) {
+                          for (auto i = block.begin(); i != block.end(); ++i) {
+                              for (int j = 0; j < width; ++j) {
+                                  if (img_new[i * width + j]) {
+                                      for (auto &neighbor : directions) {
+                                          if (i + neighbor.first >= height || i + neighbor.first < 0
+                                              || j + neighbor.second >= width || j + neighbor.second < 0) {
+                                              continue;
+                                          }
+                                          int cur = (i + neighbor.first) * width + j + neighbor.second;
+                                          if (img_new[cur] == 0) {
+                                              continue;
+                                          }
+                                          dsu.union_sets(i * width + j, cur);
+                                      }
+                                  }
+                              }
+                          }
+                      });
 
-
-#pragma omp parallel default(none) shared(img_new, width, height, count_comp, dsu, directions)
-    {
-#pragma omp for schedule(static)
-        for (int i = 0; i < height; ++i) {
-            for (int j = 0; j < width; ++j) {
-                if (img_new[i * width + j]) {
-                    for (auto &neighbor : directions) {
-                        if (i + neighbor.first >= height || i + neighbor.first < 0
-                            || j + neighbor.second >= width || j + neighbor.second < 0) {
-                            continue;
-                        }
-                        int cur = (i + neighbor.first) * width + j + neighbor.second;
-                        if (img_new[cur] == 0) {
-                            continue;
-                        }
-                        dsu.union_sets(i * width + j, cur);
-                    }
-                }
-            }
-        }
-    }
-
-//    double end = omp_get_wtime();
-//    std::cout << "Before sinhron " << (end - start) << "\n";
-
-
+    init.terminate();
     for (int i = 0; i < height; ++i) {
         for (int j = 0; j < width; ++j) {
             int cur = i * width + j;
@@ -110,9 +103,6 @@ std::pair<std::vector<int>, int> MarkComponentsPar(std::vector<int> *img, int he
             }
         }
     }
-
-//    end = omp_get_wtime();
-//    std::cout << "before return: " << (end - start) << "\n";
 
     return {img_new, count_comp};
 }
