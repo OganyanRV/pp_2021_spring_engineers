@@ -8,7 +8,7 @@ if ( USE_OMP )
     file(GLOB_RECURSE ALL_SOURCE_FILES *.cpp *.h)
 
     set(PACK_LIB "${ProjectId}_lib")
-    add_library(${PACK_LIB} STATIC ${ALL_SOURCE_FILES} )
+    add_library(${PACK_LIB} STATIC ${ALL_SOURCE_FILES} mark_components_seq.cpp mark_components_seq.h)
 
     add_executable( ${ProjectId} ${ALL_SOURCE_FILES} )
 
