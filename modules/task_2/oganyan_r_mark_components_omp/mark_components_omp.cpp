@@ -72,7 +72,7 @@ std::pair<std::vector<int>, int> MarkComponentsPar(std::vector<int> *img, int he
 
 #pragma omp parallel default(none) shared(img_new, width, height, count_comp, dsu, directions)
     {
-#pragma omp for schedule(auto)
+#pragma omp for schedule(static)
         for (int i = 0; i < height; ++i) {
             for (int j = 0; j < width; ++j) {
                 if (img_new[i * width + j]) {
